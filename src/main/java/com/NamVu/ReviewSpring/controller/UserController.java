@@ -2,6 +2,8 @@ package com.NamVu.ReviewSpring.controller;
 
 import com.NamVu.ReviewSpring.dto.request.UserRequest;
 import com.NamVu.ReviewSpring.dto.response.UserResponse;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,7 +13,7 @@ import java.util.List;
 public class UserController {
 
     @PostMapping(value = "/", headers = "apiKey=v1.0")
-    public String addUser(@RequestBody UserRequest request) {
+    public String addUser(@Valid @RequestBody UserRequest request) {
         return "User added";
     }
 
@@ -28,7 +30,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    public String deleteUser(@PathVariable int userId) {
+    public String deleteUser(@Min(5) @PathVariable int userId) {
         System.out.println("Request delete userId=" + userId);
         return "User deleted";
     }
