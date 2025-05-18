@@ -1,21 +1,32 @@
 package com.NamVu.ReviewSpring.dto.response;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 public class UserResponse implements Serializable {
     private String firstName;
     private String lastName;
     private String phone;
     private String email;
+    private LocalDate dateOfBirth;
 
     public UserResponse() {
     }
 
-    public UserResponse(String lastName, String firstName, String phone, String email) {
+    public UserResponse(String lastName, String firstName, String phone, String email, LocalDate dateOfBirth) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.phone = phone;
         this.email = email;
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public String getFirstName() {
