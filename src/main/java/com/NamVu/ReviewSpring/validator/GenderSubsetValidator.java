@@ -1,4 +1,4 @@
-package com.NamVu.ReviewSpring.util;
+package com.NamVu.ReviewSpring.validator;
 
 import com.NamVu.ReviewSpring.enums.Gender;
 import jakarta.validation.ConstraintValidator;

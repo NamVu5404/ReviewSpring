@@ -1,5 +1,6 @@
-package com.NamVu.ReviewSpring.util;
+package com.NamVu.ReviewSpring.validator;
 
+import com.NamVu.ReviewSpring.enums.Gender;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
@@ -13,13 +14,11 @@ import static java.lang.annotation.ElementType.*;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
-@Constraint(validatedBy = EnumValueValidator.class)
-public @interface EnumValue {
-    String name();
+@Constraint(validatedBy = GenderSubsetValidator.class)
+public @interface GenderSubset {
+    Gender[] anyOf();
 
-    String message() default "{name} must be any of {enumClass}";
-
-    Class<? extends Enum<?>> enumClass();
+    String message() default "must be any of {anyOf}";
 
     Class<?>[] groups() default {};
 

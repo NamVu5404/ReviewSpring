@@ -1,4 +1,4 @@
-package com.NamVu.ReviewSpring.util;
+package com.NamVu.ReviewSpring.validator;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
