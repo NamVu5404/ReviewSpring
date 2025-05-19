@@ -6,6 +6,7 @@ import com.NamVu.ReviewSpring.dto.response.ResponseData;
 import com.NamVu.ReviewSpring.dto.response.ResponseError;
 import com.NamVu.ReviewSpring.dto.response.UserResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.extern.slf4j.Slf4j;
@@ -18,9 +19,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 @Slf4j
+@Tag(name = "User Controller")
 public class UserController {
 
-    @Operation(summary = "summary", description = "description")
+    @Operation(summary = "Add new user", description = "Send a request via this API to create new user")
     @PostMapping(value = "/")
     public ResponseData<Integer> addUser(@Valid @RequestBody UserRequest request) {
 //        return new ResponseData<>(HttpStatus.CREATED.value(), "User added successfully", 1);
@@ -32,6 +34,7 @@ public class UserController {
                 .build();
     }
 
+    @Operation(summary = "Update user", description = "Send a request via this API to update user")
     @PutMapping("/{userId}")
     public ResponseData<?> updateUser(@PathVariable int userId, @RequestBody UserRequest request) {
         System.out.println("Request update userId: " + userId);
@@ -42,6 +45,7 @@ public class UserController {
                 .build();
     }
 
+    @Operation(summary = "Change status of user", description = "Send a request via this API to change status of user")
     @PatchMapping("/{userId}")
     public ResponseData<?> changeStatus(@PathVariable int userId, @RequestParam(required = false) boolean status) {
         System.out.println("Request change user status, userId=" + userId);
@@ -53,6 +57,7 @@ public class UserController {
                 .build();
     }
 
+    @Operation(summary = "Delete user permanently", description = "Send a request via this API to delete user permanently")
     @DeleteMapping("/{userId}")
     public ResponseData<?> deleteUser(@Min(5) @PathVariable int userId) {
         System.out.println("Request delete userId=" + userId);
@@ -63,6 +68,7 @@ public class UserController {
                 .build();
     }
 
+    @Operation(summary = "Get user detail", description = "Send a request via this API to get user information")
     @GetMapping("/{userId}")
     public ResponseData<UserResponse> getUser(@PathVariable int userId) {
         System.out.println("Request get user detail by userId=" + userId);
@@ -82,7 +88,8 @@ public class UserController {
                 .build();
     }
 
-    @GetMapping("/all")
+    @Operation(summary = "Get list of users per pageNo", description = "Send a request via this API to get user list by pageNo and pageSize")
+    @GetMapping("/list")
     public ResponseData<List<UserResponse>> getAll(
             @RequestParam(required = false) String email,
             @RequestParam(defaultValue = "0") int pageNo,
