@@ -1,22 +1,23 @@
 package com.NamVu.ReviewSpring.configuration;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.io.IOException;
+@Configuration
+public class AppConfig {
 
-@Component
-public class AppConfig extends OncePerRequestFilter {
-
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-        response.setHeader("Access-Control-Allow-Header", "*");
-        response.setHeader("Access-Control-Allow-Method", "*");
-        filterChain.doFilter(request, response);
+    @Bean
+    public WebMvcConfigurer webMvcConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("http://localhost:3000")
+                        .allowCredentials(true)
+                        .allowedHeaders("*");
+            }
+        };
     }
 }
