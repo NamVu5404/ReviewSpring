@@ -1,5 +1,6 @@
 package com.NamVu.ReviewSpring.controller;
 
+import com.NamVu.ReviewSpring.configuration.Translator;
 import com.NamVu.ReviewSpring.dto.request.UserRequest;
 import com.NamVu.ReviewSpring.dto.response.ResponseData;
 import com.NamVu.ReviewSpring.dto.response.ResponseError;
@@ -20,13 +21,13 @@ import java.util.List;
 public class UserController {
 
     @Operation(summary = "summary", description = "description")
-    @PostMapping(value = "/", headers = "apiKey=v1.0")
+    @PostMapping(value = "/")
     public ResponseData<Integer> addUser(@Valid @RequestBody UserRequest request) {
 //        return new ResponseData<>(HttpStatus.CREATED.value(), "User added successfully", 1);
 
         return ResponseData.<Integer>builder()
                 .status(HttpStatus.CREATED.value())
-                .message("User added successfully")
+                .message(Translator.toLocale("user.add.success"))
                 .data(1)
                 .build();
     }
@@ -37,7 +38,7 @@ public class UserController {
 //        return new ResponseData<>(HttpStatus.ACCEPTED.value(), "User updated successfully");
         return ResponseData.builder()
                 .status(HttpStatus.ACCEPTED.value())
-                .message("User updated successfully")
+                .message(Translator.toLocale("user.upd.success"))
                 .build();
     }
 
