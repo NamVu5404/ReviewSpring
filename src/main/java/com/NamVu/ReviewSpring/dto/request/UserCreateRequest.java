@@ -8,39 +8,36 @@ import com.NamVu.ReviewSpring.validator.EnumValue;
 import com.NamVu.ReviewSpring.validator.GenderSubset;
 import com.NamVu.ReviewSpring.validator.PhoneNumber;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 @Getter
-public class UserRequest implements Serializable {
+public class UserCreateRequest implements Serializable {
     @NotBlank(message = "firstName must be not blank")
     private String firstName;
 
     @NotNull(message = "lastName must be not null")
     private String lastName;
 
-    // @Email(message = "email invalid format")
     @PhoneNumber
     private String phone;
 
-    @Pattern(regexp = "^\\d{10}$", message = "phone invalid format")
+    // @Pattern(regexp = "^\\d{10}$", message = "phone invalid format")
+    @Email(message = "email invalid format")
     private String email;
 
     @NotNull(message = "dateOfBirth must by not null")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @JsonFormat(pattern = "MM/dd/yyyy")
     private Date dateOfBirth;
-
-    @NotEmpty
-    private List<String> permissions;
 
     @EnumPattern(name = "status", regexp = "ACTIVE|INACTIVE|NONE")
     private UserStatus status;
@@ -51,4 +48,14 @@ public class UserRequest implements Serializable {
     @NotNull(message = "type must be not null")
     @EnumValue(name = "type", enumClass = UserType.class)
     private String type;
+
+    @NotBlank(message = "username must be not blank")
+    @Size(min = 5, max = 32)
+    private String username;
+
+    @NotNull
+    @Size(min = 8, max = 32)
+    private String password;
+
+    private Set<AddressRequest> addresses;
 }

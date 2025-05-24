@@ -4,14 +4,13 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 
 @Getter
 @Builder
-public class UserResponse implements Serializable {
+public class UserDetailResponse implements Serializable {
+
     private String firstName;
     private String lastName;
-    private String phone;
     private String email;
-    private LocalDate dateOfBirth;
+    private String phone;
 }

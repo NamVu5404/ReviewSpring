@@ -1,9 +1,25 @@
 server:
   port: 8080
+
 spring:
   config:
     activate:
       on-profile: dev
+  devtools:
+    add-properties: true
+  datasource:
+    url: ${MYSQL_URL:jdbc:mysql://localhost:3306/ReviewSpring}
+    username: ${MYSQL_USER:root}
+    password: ${MYSQL_PASSWORD:5404}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+    show-sql: false
+
 openapi:
   service:
     api-docs: api-service
