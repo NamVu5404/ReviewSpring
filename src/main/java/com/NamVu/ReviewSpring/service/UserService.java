@@ -2,10 +2,10 @@ package com.NamVu.ReviewSpring.service;
 
 import com.NamVu.ReviewSpring.dto.request.UserCreateRequest;
 import com.NamVu.ReviewSpring.dto.request.UserUpdateRequest;
+import com.NamVu.ReviewSpring.dto.response.PageResponse;
 import com.NamVu.ReviewSpring.dto.response.UserDetailResponse;
 import com.NamVu.ReviewSpring.enums.UserStatus;
 
-import java.util.List;
 import java.util.Set;
 
 public interface UserService {
@@ -20,5 +20,5 @@ public interface UserService {
 
     UserDetailResponse getUser(long userId);
 
-    List<UserDetailResponse> getAllUser(int pageNo, int pageSize);
+    PageResponse<UserDetailResponse> getAllUser(int pageNo, int pageSize, String sortBy, String direction);
 }

@@ -2,6 +2,7 @@ package com.NamVu.ReviewSpring.service.impl;
 
 import com.NamVu.ReviewSpring.dto.request.UserCreateRequest;
 import com.NamVu.ReviewSpring.dto.request.UserUpdateRequest;
+import com.NamVu.ReviewSpring.dto.response.PageResponse;
 import com.NamVu.ReviewSpring.dto.response.UserDetailResponse;
 import com.NamVu.ReviewSpring.enums.UserStatus;
 import com.NamVu.ReviewSpring.exception.AppException;
@@ -14,11 +15,14 @@ import com.NamVu.ReviewSpring.repository.UserRepository;
 import com.NamVu.ReviewSpring.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -101,8 +105,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDetailResponse> getAllUser(int pageNo, int pageSize) {
-        return List.of();
+    public PageResponse<UserDetailResponse> getAllUser(int pageNo, int pageSize,
+                                                       String sortBy, String direction) {
+        Sort.Direction sortDirection = Sort.Direction.fromString(direction);
+        Sort sort = Sort.by(sortDirection, sortBy);
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+
+        Page<User> users = userRepository.findAll(pageable);
+
+        return PageResponse.<UserDetailResponse>builder()
+                .pageNo(pageNo)
+                .pageSize(pageSize)
+                .totalPage(users.getTotalPages())
+                .totalElement(users.getNumberOfElements())
+                .data(users.stream()
+                        .map(userMapper::mapToDetailResponse)
+                        .toList())
+                .build();
     }
 
     private User getUserById(long id) {

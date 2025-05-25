@@ -3,6 +3,7 @@ package com.NamVu.ReviewSpring.controller;
 import com.NamVu.ReviewSpring.configuration.Translator;
 import com.NamVu.ReviewSpring.dto.request.UserCreateRequest;
 import com.NamVu.ReviewSpring.dto.request.UserUpdateRequest;
+import com.NamVu.ReviewSpring.dto.response.PageResponse;
 import com.NamVu.ReviewSpring.dto.response.ResponseData;
 import com.NamVu.ReviewSpring.dto.response.UserDetailResponse;
 import com.NamVu.ReviewSpring.enums.UserStatus;
@@ -15,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -82,31 +82,16 @@ public class UserController {
 
     @Operation(summary = "Get list of users per pageNo", description = "Send a request via this API to get user list by pageNo and pageSize")
     @GetMapping("/list")
-    public ResponseData<List<UserDetailResponse>> getAll(
-            @RequestParam(required = false) String email,
+    public ResponseData<PageResponse<UserDetailResponse>> getAll(
             @RequestParam(defaultValue = "0") int pageNo,
-            @RequestParam(defaultValue = "10") int pageSize) {
-        System.out.println("Get all users");
-//        return new ResponseData<>(HttpStatus.OK.value(), "list user",
-//                List.of(new UserResponse("A", "B", "C", "D", LocalDate.now()),
-//                        new UserResponse("e", "f", "g", "h", LocalDate.now())));
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "ASC") String direction) {
 
-        return ResponseData.<List<UserDetailResponse>>builder()
+        return ResponseData.<PageResponse<UserDetailResponse>>builder()
                 .status(HttpStatus.OK.value())
                 .message("List users")
-                .data(List.of(
-                        UserDetailResponse.builder()
-                                .firstName("Nam")
-                                .lastName("Vu")
-                                .phone("0987654321")
-                                .email("nam@email.com")
-                                .build(),
-                        UserDetailResponse.builder()
-                                .firstName("A")
-                                .lastName("B")
-                                .phone("0123456789")
-                                .email("ab@email.com")
-                                .build()))
+                .data(userService.getAllUser(pageNo, pageSize, sortBy, direction))
                 .build();
     }
 }
