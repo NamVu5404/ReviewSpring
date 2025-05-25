@@ -21,4 +21,6 @@ public interface UserService {
     UserDetailResponse getUser(long userId);
 
     PageResponse<UserDetailResponse> getAllUser(int pageNo, int pageSize, String sortBy, String direction);
+
+    PageResponse<?> searchWithSqlQuery(String search, int pageNo, int pageSize, String sortBy, String direction);
 }

@@ -13,6 +13,6 @@ public class PageResponse<T> implements Serializable {
     private Integer pageNo;
     private Integer pageSize;
     private Integer totalPage;
-    private Integer totalElement;
+    private Long totalElement;
     private List<T> data;
 }

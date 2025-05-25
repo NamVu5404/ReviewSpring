@@ -80,7 +80,10 @@ public class UserController {
                 .build();
     }
 
-    @Operation(summary = "Get list of users per pageNo", description = "Send a request via this API to get user list by pageNo and pageSize")
+    @Operation(
+            summary = "Get list of users per pageNo",
+            description = "Send a request via this API to get user list by pageNo and pageSize"
+    )
     @GetMapping("/list")
     public ResponseData<PageResponse<UserDetailResponse>> getAll(
             @RequestParam(defaultValue = "0") int pageNo,
@@ -92,6 +95,25 @@ public class UserController {
                 .status(HttpStatus.OK.value())
                 .message("List users")
                 .data(userService.getAllUser(pageNo, pageSize, sortBy, direction))
+                .build();
+    }
+
+    @Operation(
+            summary = "Search users with pagination",
+            description = "Send a request via this API to search for users by keyword, with support for page number and page size."
+    )
+    @GetMapping("/search")
+    public ResponseData<PageResponse<?>> searchWithSqlQuery(
+            @RequestParam(required = false) String search,
+            @RequestParam(defaultValue = "0") int pageNo,
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "ASC") String direction) {
+
+        return ResponseData.<PageResponse<?>>builder()
+                .status(HttpStatus.OK.value())
+                .message("List users")
+                .data(userService.searchWithSqlQuery(search, pageNo, pageSize, sortBy, direction))
                 .build();
     }
 }

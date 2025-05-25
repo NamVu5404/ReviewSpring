@@ -1,5 +1,6 @@
 package com.NamVu.ReviewSpring.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,7 +9,8 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "tbl_address")
+@Entity
+@Table(name = "tbl_address")
 public class Address extends AbstractEntity {
 
     @Column(name = "apartment_number")
@@ -32,6 +34,7 @@ public class Address extends AbstractEntity {
     @Column(name = "country")
     private String country;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;

@@ -11,6 +11,7 @@ import com.NamVu.ReviewSpring.mapper.AddressMapper;
 import com.NamVu.ReviewSpring.mapper.UserMapper;
 import com.NamVu.ReviewSpring.model.Address;
 import com.NamVu.ReviewSpring.model.User;
+import com.NamVu.ReviewSpring.repository.SearchRepository;
 import com.NamVu.ReviewSpring.repository.UserRepository;
 import com.NamVu.ReviewSpring.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final AddressMapper addressMapper;
     private final PasswordEncoder passwordEncoder;
+    private final SearchRepository searchRepository;
 
     @Override
     public long saveUser(UserCreateRequest request) {
@@ -117,11 +119,17 @@ public class UserServiceImpl implements UserService {
                 .pageNo(pageNo)
                 .pageSize(pageSize)
                 .totalPage(users.getTotalPages())
-                .totalElement(users.getNumberOfElements())
+                .totalElement(users.getTotalElements())
                 .data(users.stream()
                         .map(userMapper::mapToDetailResponse)
                         .toList())
                 .build();
+    }
+
+    @Override
+    public PageResponse<?> searchWithSqlQuery(String search, int pageNo, int pageSize,
+                                                               String sortBy, String direction) {
+        return searchRepository.search(search, pageNo, pageSize, sortBy, direction);
     }
 
     private User getUserById(long id) {
