@@ -53,6 +53,6 @@ public class User extends AbstractEntity {
     @Column(name = "status")
     private UserStatus status;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "user")
     private Set<Address> addresses = new HashSet<>();
 }

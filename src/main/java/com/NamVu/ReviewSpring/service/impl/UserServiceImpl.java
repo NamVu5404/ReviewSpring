@@ -76,7 +76,8 @@ public class UserServiceImpl implements UserService {
                     return address;
                 })
                 .collect(Collectors.toSet());
-        user.setAddresses(addresses);
+        user.getAddresses().clear();
+        user.getAddresses().addAll(addresses);
 
         userRepository.save(user);
 
@@ -130,6 +131,11 @@ public class UserServiceImpl implements UserService {
     public PageResponse<?> searchWithSqlQuery(String search, int pageNo, int pageSize,
                                                                String sortBy, String direction) {
         return searchRepository.search(search, pageNo, pageSize, sortBy, direction);
+    }
+
+    @Override
+    public PageResponse<?> advanceSearchWithCriteria(int pageNo, int pageSize, String sortBy, String address, String... search) {
+        return searchRepository.searchUserByCriteria(pageNo, pageSize, sortBy, address, search);
     }
 
     private User getUserById(long id) {

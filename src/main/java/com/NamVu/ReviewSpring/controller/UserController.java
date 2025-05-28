@@ -102,7 +102,7 @@ public class UserController {
             summary = "Search users with pagination",
             description = "Send a request via this API to search for users by keyword, with support for page number and page size."
     )
-    @GetMapping("/search")
+    @GetMapping("/list-user-and-search-with-paging-and-sorting")
     public ResponseData<PageResponse<?>> searchWithSqlQuery(
             @RequestParam(required = false) String search,
             @RequestParam(defaultValue = "0") int pageNo,
@@ -114,6 +114,21 @@ public class UserController {
                 .status(HttpStatus.OK.value())
                 .message("List users")
                 .data(userService.searchWithSqlQuery(search, pageNo, pageSize, sortBy, direction))
+                .build();
+    }
+
+    @Operation(summary = "Advance search query by criteria", description = "Send a request via this API to get user list by pageNo, pageSize and sort by multiple column")
+    @GetMapping("/advance-search-with-criteria")
+    public ResponseData<?> advanceSearchWithCriteria(@RequestParam(defaultValue = "0", required = false) int pageNo,
+                                                     @RequestParam(defaultValue = "20", required = false) int pageSize,
+                                                     @RequestParam(required = false) String sortBy,
+                                                     @RequestParam(required = false) String address,
+                                                     @RequestParam(defaultValue = "") String... search) {
+        log.info("Request advance search query by criteria");
+        return ResponseData.<PageResponse<?>>builder()
+                .status(HttpStatus.OK.value())
+                .message("List users")
+                .data(userService.advanceSearchWithCriteria(pageNo, pageSize, sortBy, address, search))
                 .build();
     }
 }
