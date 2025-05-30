@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -129,6 +130,19 @@ public class UserController {
                 .status(HttpStatus.OK.value())
                 .message("List users")
                 .data(userService.advanceSearchWithCriteria(pageNo, pageSize, sortBy, address, search))
+                .build();
+    }
+
+    @Operation(summary = "Advance search query by specification", description = "Send a request via this API to get user list by pageNo, pageSize and sort by multiple column")
+    @GetMapping("/advance-search-with-specification")
+    public ResponseData<?> advanceSearchWithSpecification(Pageable pageable,
+                                                          @RequestParam(required = false) String[] user,
+                                                          @RequestParam(required = false) String[] address) {
+        log.info("Request advance search query by specification");
+        return ResponseData.<PageResponse<?>>builder()
+                .status(HttpStatus.OK.value())
+                .message("List users")
+                .data(userService.advanceSearchWithSpecification(pageable, user, address))
                 .build();
     }
 }

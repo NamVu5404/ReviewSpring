@@ -4,6 +4,7 @@ import com.NamVu.ReviewSpring.dto.request.UserCreateRequest;
 import com.NamVu.ReviewSpring.dto.request.UserUpdateRequest;
 import com.NamVu.ReviewSpring.dto.response.PageResponse;
 import com.NamVu.ReviewSpring.dto.response.UserDetailResponse;
+import com.NamVu.ReviewSpring.enums.Gender;
 import com.NamVu.ReviewSpring.enums.UserStatus;
 import com.NamVu.ReviewSpring.exception.AppException;
 import com.NamVu.ReviewSpring.exception.ErrorCode;
@@ -14,17 +15,24 @@ import com.NamVu.ReviewSpring.model.User;
 import com.NamVu.ReviewSpring.repository.SearchRepository;
 import com.NamVu.ReviewSpring.repository.UserRepository;
 import com.NamVu.ReviewSpring.service.UserService;
+import com.NamVu.ReviewSpring.specification.UserSpec;
+import com.NamVu.ReviewSpring.specification.UserSpecificationBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -136,6 +144,45 @@ public class UserServiceImpl implements UserService {
     @Override
     public PageResponse<?> advanceSearchWithCriteria(int pageNo, int pageSize, String sortBy, String address, String... search) {
         return searchRepository.searchUserByCriteria(pageNo, pageSize, sortBy, address, search);
+    }
+
+    @Override
+    public PageResponse<User> advanceSearchWithSpecification(Pageable pageable, String[] user, String[] address) {
+        Page<User> users = null;
+
+        List<User> userList = new ArrayList<>();
+        if (user != null && address != null)  {
+            // tim kiem tren ca user va address => join table
+        } else if (user != null) {
+            // tim kiem tren user
+//            Specification<User> spec = UserSpec.hasLastName(user[0])
+//                    .and(UserSpec.hasFirstName(user[1]))
+//                    .and(UserSpec.notEqualGender(Gender.MALE));
+//
+//            userList = userRepository.findAll(spec);
+
+            UserSpecificationBuilder builder = new UserSpecificationBuilder();
+
+            for (String s : user) {
+                Pattern pattern = Pattern.compile("(\\w+?)([<:>~!])(.*)(\\p{Punct}?)(\\p{Punct}?)");
+                Matcher matcher = pattern.matcher(s);
+                if (matcher.find()) {
+                    builder.with(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(4), matcher.group(5));
+                }
+            }
+
+            userList = userRepository.findAll(builder.build());
+        } else {
+            userList = userRepository.findAll();
+        }
+
+        return PageResponse.<User>builder()
+                .pageNo(pageable.getPageNumber())
+                .pageSize(pageable.getPageSize())
+                .totalPage(10)
+                .totalElement(10L)
+                .data(userList)
+                .build();
     }
 
     private User getUserById(long id) {
