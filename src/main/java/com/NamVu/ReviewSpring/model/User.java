@@ -45,6 +45,8 @@ public class User extends AbstractEntity {
     @Column(name = "password")
     private String password;
 
+    private Integer age;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "type")
     private UserType type;
